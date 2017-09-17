@@ -17,7 +17,11 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) throws Exception {
-        Server server = new Server(8080);
+    	String webPort = System.getenv("PORT");
+        if(webPort == null || webPort.isEmpty()) {
+            webPort = "8080";
+        }
+        Server server = new Server(Integer.valueOf(webPort));
         ServletContextHandler context=new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/camel");
         
