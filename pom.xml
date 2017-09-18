@@ -19,12 +19,27 @@
             <version>2.5</version>
         </dependency>
 
+	<!-- Camel Servlet -->
+        <dependency> 
+	    <groupId>org.apache.camel</groupId> 
+	    <artifactId>camel-servlet</artifactId> 
+	    <version>2.19.0</version> 
+	</dependency>
+
+        <!-- Camel Core -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>2.19.0</version>
+        </dependency>
+
         <!-- Jetty -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>9.4.7.RC0</version>
-        </dependency>	
+        </dependency>
+	
     </dependencies>
 
     <build>

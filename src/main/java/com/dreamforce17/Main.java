@@ -1,5 +1,8 @@
 package com.dreamforce17;
 
+import org.apache.camel.CamelContext;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.impl.DefaultCamelContext;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -22,15 +25,29 @@ public class Main {
             webPort = "8080";
         }
         Server server = new Server(Integer.valueOf(webPort));
-        ServletContextHandler context=new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/camel");
+        ServletContextHandler servletContext = new ServletContextHandler();
+        servletContext.setContextPath("/camel");
         
         ServletHolder holderPwd = new ServletHolder("HelloServlet", new HelloServlet());
-        context.addServlet(holderPwd, "/*");
-        server.setHandler(context);
+        servletContext.addServlet(holderPwd, "/*");
+        server.setHandler(servletContext);
+        
+        CamelContext camelContext = new DefaultCamelContext();
+        
+        camelContext.addRoutes(new RouteBuilder() {
+			public void configure() {
+				from("servlet:///cases").
+					log("Received body ${body}");
+				;
+			}
+        });
+        
+        camelContext.start();
         
         server.start();
-        server.join();   
+        server.join();  
+        
+        camelContext.stop();
     }
 
 }
