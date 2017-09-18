@@ -2,6 +2,7 @@ package com.dreamforce17;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.http.common.CamelServlet;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -28,7 +29,7 @@ public class Main {
         ServletContextHandler servletContext = new ServletContextHandler();
         servletContext.setContextPath("/camel");
         
-        ServletHolder holderPwd = new ServletHolder("HelloServlet", new HelloServlet());
+        ServletHolder holderPwd = new ServletHolder("CamelServlet", new CamelServlet());
         servletContext.addServlet(holderPwd, "/*");
         server.setHandler(servletContext);
         
