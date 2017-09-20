@@ -2,20 +2,13 @@ package com.dreamforce17;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.http.common.CamelServlet;
+import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-/**
- * 
- * This class launches the web application in an embedded Jetty container.
- * This is the entry point to your application. The Java command that is used for
- * launching should fire this main method.
- *
- */
-public class Main {
+public class MainApp {
     
     /**
      * @param args
@@ -23,15 +16,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
     	String webPort = System.getenv("PORT");
         if(webPort == null || webPort.isEmpty()) {
-            webPort = "8080";
+            webPort = "8082";
         }
         Server server = new Server(Integer.valueOf(webPort));
-        ServletContextHandler servletContext = new ServletContextHandler();
-        servletContext.setContextPath("/camel");
-        
-        ServletHolder holderPwd = new ServletHolder("CamelServlet", new CamelServlet());
-        servletContext.addServlet(holderPwd, "/*");
-        server.setHandler(servletContext);
+        ServletContextHandler context = new ServletContextHandler();
+        context.setContextPath("/camel");
+        context.addServlet(new ServletHolder("CamelServlet", new CamelHttpTransportServlet()),"/*");
+        server.setHandler(context);
         
         CamelContext camelContext = new DefaultCamelContext();
         
@@ -44,10 +35,8 @@ public class Main {
         });
         
         camelContext.start();
-        
         server.start();
         server.join();  
-        
         camelContext.stop();
     }
 
