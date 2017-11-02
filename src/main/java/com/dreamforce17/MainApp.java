@@ -47,6 +47,9 @@ public class MainApp {
 
 				from("servlet:///cases")
 				
+					// log incoming body
+					.log("Receive body = ${body}")
+				
 					// remember current exchange we will need to to send response back
 					.process(new Processor() {
 						@Override
@@ -68,7 +71,7 @@ public class MainApp {
 					.process(new Processor() {
 						@Override
 						public void process(Exchange exchange) throws Exception {
-							// save original exhange id (to find it out later for sending response back to Salesforce)
+							// save original exchange id (to find it out later for sending response back to Salesforce)
 							exchange.setProperty("OriginalExchangeId", exchange.getProperty("CamelCorrelationId", String.class));
 							// obtain Salesforce case (it's in the body)
 							Case c = exchange.getIn().getBody(Case.class);
