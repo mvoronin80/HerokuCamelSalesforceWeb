@@ -39,6 +39,24 @@
 	    	<groupId>org.apache.camel</groupId> 
 	    	<artifactId>camel-servlet</artifactId> 
 		</dependency>
+		
+		<!-- Camel Jackson serialization -->
+		<dependency>
+    		<groupId>org.apache.camel</groupId>
+    		<artifactId>camel-jackson</artifactId>	
+		</dependency>
+		
+		<!-- Camel Salesforce (without Jetty dependencies) -->
+		<dependency>
+    		<groupId>org.apache.camel</groupId>
+    		<artifactId>camel-salesforce</artifactId>
+    		<exclusions>
+    			<exclusion>
+          			<groupId>org.eclipse.jetty</groupId>
+          			<artifactId>*</artifactId>
+        		</exclusion>
+        	</exclusions>	
+		</dependency>
 
         <!-- Jetty -->
         <dependency>
@@ -46,6 +64,12 @@
             <artifactId>jetty-servlet</artifactId>
             <version>7.6.0.v20120127</version>
         </dependency>
+        
+        <!-- add camel telegram dependency -->
+    	<dependency>
+        	<groupId>org.apache.camel</groupId>
+        	<artifactId>camel-telegram</artifactId>
+    	</dependency>
         
         <!-- logging -->
     	<dependency>
@@ -98,6 +122,7 @@
                     </execution>
                 </executions>
             </plugin>
+    
         </plugins>
     </build>
 </project>
