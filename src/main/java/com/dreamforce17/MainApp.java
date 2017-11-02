@@ -11,7 +11,6 @@ import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 import org.apache.camel.component.telegram.model.OutgoingTextMessage;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.processor.aggregate.GroupedExchangeAggregationStrategy;
-import org.apache.camel.salesforce.dto.Case;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -62,7 +61,7 @@ public class MainApp {
 					.streamCaching()
 					
 					// convert body from JSON text to List of Salesforce cases
-					.unmarshal(new ListJacksonDataFormat(Case.class))
+					.unmarshal(new ListJacksonDataFormat(CaseInfo.class))
 					
 					// split the List of case to single Cases (there might be many of them)
 					.split().body()
@@ -74,13 +73,13 @@ public class MainApp {
 							// save original exchange id (to find it out later for sending response back to Salesforce)
 							exchange.setProperty("OriginalExchangeId", exchange.getProperty("CamelCorrelationId", String.class));
 							// obtain Salesforce case (it's in the body)
-							Case c = exchange.getIn().getBody(Case.class);
+							CaseInfo c = exchange.getIn().getBody(CaseInfo.class);
 							// save Case to create response back to Salesforce
-							exchange.setProperty("CaseId", c.getId());
+							exchange.setProperty("CaseId", c.id);
 							// create Telegram message
 							OutgoingTextMessage messageOut = new OutgoingTextMessage();
-							messageOut.setText("Case " + c.getId() + " is now " + c.getStatus().toString());
-							messageOut.setChatId(c.getTelegram_Chat_Id__c());
+							messageOut.setText("Case " + c.id + " is now " + c.status.toString());
+							messageOut.setChatId(c.telegram_chat_id);
 							// save Telegram message to sent out
 							exchange.getIn().setBody(messageOut);
 						}
