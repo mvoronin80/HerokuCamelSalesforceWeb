@@ -86,7 +86,7 @@ public class MainApp {
 					})
 					
 					// send Telegram message (it was prepared on the prev state)
-					.to("telegram:bots/359951231:AAE3dmv5LB3tnUzeRpzJI8c7srBZi9wG55s")
+					.to("telegram:bots/12345")
 					
 					// now we need to aggregate all Telegram responses to create one response back to Salesforce
 					/*
